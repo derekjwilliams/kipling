@@ -11,7 +11,7 @@ const client = new ApolloClient({
   uri: "http://localhost:5002/graphql"
 });
 
-  const productsListStyle = {
+  const fieldListStyle = {
     display: "grid",
     backgroundColor: "#bbb",
     gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
@@ -45,7 +45,7 @@ const FieldBoundaries = () => (
         <div style={{width: '100px', height: '100px'}}>
           <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
         </div>);
-      return <div style={productsListStyle}>{fieldmaps}</div>
+      return <div style={fieldListStyle}>{fieldmaps}</div>
     }}
   </Query>
 );
