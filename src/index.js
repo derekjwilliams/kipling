@@ -21,12 +21,19 @@ const FieldBoundaries = () => (
   <Query
     query={gql`
     {
-    	allMatchedFields (first:300){
-  			nodes {
-    			boundary
-  			}
-		}
-	}
+      allMatchedFarms(first: 3) {
+        nodes {
+          id
+          boundary
+        }
+      }
+      allMatchedFields(first: 3) {
+        nodes {
+          boundary
+        }
+      }
+    }
+
     
   `}
   >

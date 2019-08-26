@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import { geoMercator, geoPath} from "d3-geo"
 
-class FieldBoundary extends Component {
+
+
+class MultiFieldBoundary extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -58,4 +60,4 @@ class FieldBoundary extends Component {
   }
 }
 
-export default FieldBoundary
+export default MultiFieldBoundary
