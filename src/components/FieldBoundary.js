@@ -3,6 +3,8 @@
 import React, { Component } from "react"
 import { geoMercator, geoPath} from "d3-geo"
 
+
+
 class FieldBoundary extends Component {
   constructor(props) {
     super(props)
@@ -16,33 +18,34 @@ class FieldBoundary extends Component {
     this.setState({fieldBoundary: this.state.fieldBoundary})
   }
 
-  drawMap() {
+// for demo purposes only, typically the colors would come from index.css (or elsewhere)
+  randomColor() {
+    let result = '#';
+    for (let i = 0; i < 6; i++) {
+      result += '0123456789ABCDEF'[Math.floor(Math.random() * 16)];
+    }
+    return result
+  }
 
-  const letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  let strokecolor = '#'
-  for (var i = 0; i < 6; i++) {
-    strokecolor += letters[Math.floor(Math.random() * 16)];
-  }
+  drawMap() {
   	const width = this.boundaryBoxRef.current != null ?
   	                this.boundaryBoxRef.current.offsetWidth :
-  	                1;
+  	                1
+
   	const height = this.boundaryBoxRef.current != null ?
   	                this.boundaryBoxRef.current.offsetHeight :
-  	                1;
+  	                1
+
     const features = [{"type": "Feature", "geometry": this.state.fieldBoundary}]
-  	const projection = geoMercator().fitSize([Math.min(width, height) - 10, Math.min(width, height) - 10], { "type": "FeatureCollection", features });
-    const pathGenerator = geoPath().projection(projection);
+  	const projection = geoMercator().fitSize([Math.min(width, height) - 10, Math.min(width, height) - 10], { "type": "FeatureCollection", features })
+    const pathGenerator = geoPath().projection(projection)
      
     this.fieldPath = features
       .map((d, i) => {
         return <path
           d={pathGenerator(d)}
-          stroke={strokecolor}
-          fill={color}
+          stroke={this.randomColor()}
+          fill={this.randomColor()}
           className="field"
 
       />})

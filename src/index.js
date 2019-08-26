@@ -21,7 +21,7 @@ const FieldBoundaries = () => (
   <Query
     query={gql`
     {
-    	allMatchedFields (first:6000){
+    	allMatchedFields (first:300){
   			nodes {
     			boundary
   			}
