@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.field-boundary {
+}
+
+.field {
+	stroke: #fff !important;
+	stroke-linejoin: round;
+	stroke-width: 0;
+}
+
+.field-boundary > svg {
+	width: 100%; 
+	height: 100%;
+}
