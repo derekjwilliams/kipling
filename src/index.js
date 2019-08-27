@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import FieldBoundary from './components/FieldBoundary'
+import MultiFieldBoundary from './components/MultiFieldBoundary'
 import * as serviceWorker from './serviceWorker';
 import ApolloClient from "apollo-boost";
 import { ApolloProvider, Query } from "react-apollo";
@@ -11,24 +12,30 @@ const client = new ApolloClient({
   uri: "http://localhost:5002/graphql"
 });
 
-  const fieldListStyle = {
-    display: "grid",
-    backgroundColor: "#bbb",
-    gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
-  }
+const multiFieldListStyle = {
+  display: "grid",
+  backgroundColor: "#bbb",
+  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
+}
+const fieldListStyle = {
+  display: "grid",
+  backgroundColor: "#bbb",
+  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
+}
 
 const FieldBoundaries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 3) {
+      allMatchedFarms(first: 30) {
         nodes {
           id
           boundary
         }
       }
-      allMatchedFields(first: 3) {
+      allMatchedFields(first: 10) {
         nodes {
+          id
           boundary
         }
       }
@@ -46,13 +53,23 @@ const FieldBoundaries = () => (
         return <p>Error, Oh Noes, check the console</p>
       }
 
-      const validNodes = data.allMatchedFields.nodes.filter(n => n != null)
-      const boundaries = validNodes.map(f => JSON.parse(f.boundary)).filter(b => b && b.coordinates && b.coordinates.length > 0)
-      const fieldmaps = boundaries.map((f,i) => 
-        <div style={{width: '100px', height: '100px'}}>
+      const validMultiFieldNodes = data.allMatchedFarms.nodes.filter(n => n != null)
+      const multiFieldBoundaries = validMultiFieldNodes.map(f => JSON.parse(f.boundary)).filter(b => b)
+      const multiFieldMaps = multiFieldBoundaries.map((f,i) => 
+        <div>
+          <MultiFieldBoundary key={i} multiFieldBoundary={f}></MultiFieldBoundary> 
+        </div>);
+
+      const validFieldNodes = data.allMatchedFields.nodes.filter(n => n != null)
+      const fieldBoundaries = validFieldNodes.map(f => JSON.parse(f.boundary)).filter(b => b && b.coordinates && b.coordinates.length > 0)
+
+      const fieldmaps = fieldBoundaries.map((f,i) => 
+        <div>
           <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
         </div>);
-      return <div style={fieldListStyle}>{fieldmaps}</div>
+      return (
+        <div><div style={multiFieldListStyle}>{multiFieldMaps}</div><div style={fieldListStyle}>{fieldmaps}</div></div>
+        )
     }}
   </Query>
 );

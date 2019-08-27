@@ -1,22 +1,38 @@
 import React, { Component } from "react"
 import { geoMercator, geoPath} from "d3-geo"
-
-
+var topojson = require("topojson")
+// import * as topojson from "topojson-client";
 
 class MultiFieldBoundary extends Component {
   constructor(props) {
     super(props)
+    const topo = topojson.topology({"farmBoundary": props.multiFieldBoundary})
     this.state = {
-      fieldBoundary: props.fieldBoundary,
+    	fieldBoundary: topo,
+    	topofeature: topojson.feature(topo, topo.objects.farmBoundary)
     }
     this.boundaryBoxRef = React.createRef();
   }
 
   componentDidMount() {
-    this.setState({fieldBoundary: this.state.fieldBoundary})
+	this.setState({
+      topofeature: topojson.feature(this.state.fieldBoundary, this.state.fieldBoundary.objects.farmBoundary),
+    })
   }
 
-// for demo purposes only, typically the stroke and fill colors would come from index.css (or elsewhere)
+  projection() {
+  	const width = this.boundaryBoxRef.current != null ?
+  	                this.boundaryBoxRef.current.offsetWidth :
+  	                100
+
+  	const height = this.boundaryBoxRef.current != null ?
+  	                this.boundaryBoxRef.current.offsetHeight :
+  	                100
+
+  	const projection = geoMercator().fitSize([Math.min(width, height) - 10, Math.min(width, height) - 10], this.state.topofeature)
+    return projection  
+  }
+  
   randomColor() {
     let result = '#';
     for (let i = 0; i < 6; i++) {
@@ -25,39 +41,29 @@ class MultiFieldBoundary extends Component {
     return result
   }
 
-  drawMap() {
-  	const width = this.boundaryBoxRef.current != null ?
-  	                this.boundaryBoxRef.current.offsetWidth :
-  	                1
-
-  	const height = this.boundaryBoxRef.current != null ?
-  	                this.boundaryBoxRef.current.offsetHeight :
-  	                1
-    if (width !== 1) {
-      const features = [{"type": "Feature", "geometry": this.state.fieldBoundary}]
-      console.log(width)
-    	const projection = geoMercator().fitSize([Math.min(width, height) - 10, Math.min(width, height) - 10], { "type": "FeatureCollection", features })
-      const pathGenerator = geoPath().projection(projection)
-       
-      this.fieldPath = features
-        .map((d, i) => {
-          return <path
-            d={pathGenerator(d)}
-            stroke={this.randomColor()}
-            fill={this.randomColor()}
-            className="field"
-        />})
-    }
-  }
-  render() {this.drawMap();
+  render() {
+  	if (this.state.topofeature.features == null) {
+  		return (<div></div>)
+  	}
+  	const p = this.projection()
     return (
-      <div ref={this.boundaryBoxRef} className='field-boundary'>
-          <svg viewBox="-5 -5 100 100" ref={(mapSVG) => this.mapSVG = mapSVG}>
-              <g>{this.fieldPath}</g>
-          </svg>
+      <div ref={this.boundaryBoxRef} class="multi-field">
+        <svg viewBox="-4 -4 100 100">
+          <g className="countries">
+            {
+              this.state.topofeature.features.map((d,i) => (
+                <path
+                  key={ `path-${ i }` }
+                  d={ geoPath().projection(p)(d) }
+                  className="field"
+              	  fill={this.randomColor()}
+                />
+              ))
+            }
+          </g>
+        </svg>
       </div>
     )
   }
 }
-
 export default MultiFieldBoundary

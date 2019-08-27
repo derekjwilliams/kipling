@@ -45,6 +45,8 @@ class FieldBoundary extends Component {
             fill={this.randomColor()}
             className="field"
         />})
+      console.log(this.fieldPath)
+
     }
   }
   render() {this.drawMap();

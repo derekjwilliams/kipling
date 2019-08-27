@@ -11,14 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
+.multi-field {
+	border: 1px solid #444;
+	background-color: #333;
+	max-height: 120px;
+	min-height: 120px;
+}
 .field-boundary {
 }
 
 .field {
 	stroke: #fff !important;
 	stroke-linejoin: round;
-	stroke-width: 0;
+	stroke-width: 1.5px;
 }
 
 .field-boundary > svg {
