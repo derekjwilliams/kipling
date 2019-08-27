@@ -27,13 +27,13 @@ const FieldBoundaries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 30) {
+      allMatchedFarms(first: 100) {
         nodes {
           id
           boundary
         }
       }
-      allMatchedFields(first: 10) {
+      allMatchedFields(first: 100) {
         nodes {
           id
           boundary
@@ -67,8 +67,11 @@ const FieldBoundaries = () => (
         <div>
           <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
         </div>);
+      
       return (
-        <div><div style={multiFieldListStyle}>{multiFieldMaps}</div><div style={fieldListStyle}>{fieldmaps}</div></div>
+          <div>
+            <div class="multi-fields-collection" style={multiFieldListStyle}>{multiFieldMaps}</div>
+            <div class="fields-collection" style={fieldListStyle}>{fieldmaps}</div></div>
         )
     }}
   </Query>
