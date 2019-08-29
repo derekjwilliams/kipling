@@ -7,56 +7,52 @@ class FieldBoundary extends Component {
     this.state = {
       fieldBoundary: props.fieldBoundary,
     }
-    this.boundaryBoxRef = React.createRef();
+    this.boundaryBoxRef = React.createRef()
   }
 
   componentDidMount() {
     this.setState({fieldBoundary: this.state.fieldBoundary})
   }
 
-// for demo purposes only, typically the stroke and fill colors would come from index.css (or elsewhere)
-  randomColor() {
-    let result = '#';
-    for (let i = 0; i < 6; i++) {
-      result += '0123456789ABCDEF'[Math.floor(Math.random() * 16)];
-    }
-    return result
-  }
-
-  drawMap() {
-  	const width = this.boundaryBoxRef.current != null ?
-  	                this.boundaryBoxRef.current.offsetWidth :
-  	                1
-
-  	const height = this.boundaryBoxRef.current != null ?
-  	                this.boundaryBoxRef.current.offsetHeight :
-  	                1
-    if (width !== 1) {
+  draw() {
+    if (this.boundaryBoxRef.current) {
+  	  const width = this.boundaryBoxRef.current.offsetWidth
+  	  const height = this.boundaryBoxRef.current.offsetHeight
       const features = [{"type": "Feature", "geometry": this.state.fieldBoundary}]
-      console.log(width)
-    	const projection = geoMercator().fitSize([Math.min(width, height) - 10, Math.min(width, height) - 10], { "type": "FeatureCollection", features })
+    	const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], { "type": "FeatureCollection", features })
       const pathGenerator = geoPath().projection(projection)
        
       this.fieldPath = features
         .map((d, i) => {
           return <path
             d={pathGenerator(d)}
-            stroke={this.randomColor()}
-            fill={this.randomColor()}
             className="field"
+            fill={this.randomGreen()}
         />})
-      console.log(this.fieldPath)
-
     }
   }
-  render() {this.drawMap();
+  render() {
+    this.draw();
     return (
       <div ref={this.boundaryBoxRef} className='field-boundary'>
-          <svg viewBox="-5 -5 100 100" ref={(mapSVG) => this.mapSVG = mapSVG}>
-              <g>{this.fieldPath}</g>
-          </svg>
+        <svg viewBox="-4 -4 116 116" ref={(mapSVG) => this.mapSVG = mapSVG}>
+          <g>{this.fieldPath}</g>
+        </svg>
       </div>
     )
+  }
+  randomGreen() {
+    let result = '#'
+    for (let i = 0; i < 2; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    for (let i = 2; i < 4; i++) {
+      result += '456789ABCDEF'[Math.floor(Math.random() * 10)]
+    }
+    for (let i = 4; i < 6; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    return result
   }
 }
 

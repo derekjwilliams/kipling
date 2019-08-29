@@ -1,7 +1,6 @@
 import React, { Component } from "react"
-import { geoMercator, geoPath} from "d3-geo"
+import { geoMercator, geoPath } from "d3-geo"
 var topojson = require("topojson")
-// import * as topojson from "topojson-client";
 
 class MultiFieldBoundary extends Component {
   constructor(props) {
@@ -20,43 +19,43 @@ class MultiFieldBoundary extends Component {
     })
   }
 
+  getHeight() {
+    if (this.boundaryBoxRef.current) {
+      return this.boundaryBoxRef.current.offsetHeight ;
+    } return 100
+  }
+  getWidth() {
+    if (this.boundaryBoxRef.current) {
+      return this.boundaryBoxRef.current.offsetWidth ;
+    } return 100
+  }
   projection() {
-  	const width = this.boundaryBoxRef.current != null ?
-  	                this.boundaryBoxRef.current.offsetWidth :
-  	                100
-
-  	const height = this.boundaryBoxRef.current != null ?
-  	                this.boundaryBoxRef.current.offsetHeight :
-  	                100
-
-  	const projection = geoMercator().fitSize([Math.min(width, height) - 10, Math.min(width, height) - 10], this.state.topofeature)
-    return projection  
+    if (this.boundaryBoxRef.current) {
+    	const width = this.boundaryBoxRef.current.offsetWidth 
+    	const height = this.boundaryBoxRef.current.offsetHeight
+    	const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], this.state.topofeature)
+      return projection  
+    } return null
   }
   
-  randomColor() {
-    let result = '#';
-    for (let i = 0; i < 6; i++) {
-      result += '0123456789ABCDEF'[Math.floor(Math.random() * 16)];
-    }
-    return result
-  }
-
   render() {
   	if (this.state.topofeature.features == null) {
   		return (<div></div>)
   	}
-  	const p = this.projection()
+    
+    const pad = 4
+  	const projection = this.projection()
     return (
       <div ref={this.boundaryBoxRef} class="multi-field">
-        <svg viewBox="-4 -4 100 100">
+        <svg viewBox={`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}`}>
           <g className="countries">
             {
               this.state.topofeature.features.map((d,i) => (
                 <path
                   key={ `path-${ i }` }
-                  d={ geoPath().projection(p)(d) }
-                  className="field"
-              	  fill={this.randomColor()}
+                  d={ geoPath().projection(projection)(d) }
+                  className="multi-field"
+              	  fill={this.randomGreen()}
                 />
               ))
             }
@@ -65,5 +64,21 @@ class MultiFieldBoundary extends Component {
       </div>
     )
   }
+
+  randomGreen() {
+    let result = '#'
+    for (let i = 0; i < 2; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    for (let i = 2; i < 4; i++) {
+      result += '456789ABCDEF'[Math.floor(Math.random() * 10)]
+    }
+    for (let i = 4; i < 6; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    return result
+  }
+
+
 }
 export default MultiFieldBoundary

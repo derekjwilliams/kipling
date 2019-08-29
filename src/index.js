@@ -14,12 +14,12 @@ const client = new ApolloClient({
 
 const multiFieldListStyle = {
   display: "grid",
-  backgroundColor: "#bbb",
+  backgroundColor: "#333",
   gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
 }
 const fieldListStyle = {
   display: "grid",
-  backgroundColor: "#bbb",
+  backgroundColor: "#333",
   gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
 }
 
@@ -27,21 +27,23 @@ const FieldBoundaries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 100) {
+      allMatchedFarms(first: 40) {
+        totalCount
         nodes {
           id
           boundary
+          simplifiedBoundary
+          
         }
       }
-      allMatchedFields(first: 100) {
+      allMatchedFields(first: 40) {
         nodes {
-          id
+          id 
           boundary
+          simplifiedBoundary
         }
       }
     }
-
-    
   `}
   >
 
@@ -53,25 +55,27 @@ const FieldBoundaries = () => (
         return <p>Error, Oh Noes, check the console</p>
       }
 
-      const validMultiFieldNodes = data.allMatchedFarms.nodes.filter(n => n != null)
-      const multiFieldBoundaries = validMultiFieldNodes.map(f => JSON.parse(f.boundary)).filter(b => b)
-      const multiFieldMaps = multiFieldBoundaries.map((f,i) => 
+      const multiFieldMaps = data.allMatchedFarms.nodes
+        .map(f => JSON.parse(f.boundary))
+        .filter(b => b)
+        .map((f,i) => 
         <div>
           <MultiFieldBoundary key={i} multiFieldBoundary={f}></MultiFieldBoundary> 
         </div>);
 
-      const validFieldNodes = data.allMatchedFields.nodes.filter(n => n != null)
-      const fieldBoundaries = validFieldNodes.map(f => JSON.parse(f.boundary)).filter(b => b && b.coordinates && b.coordinates.length > 0)
-
-      const fieldmaps = fieldBoundaries.map((f,i) => 
-        <div>
+      const fieldmaps = data.allMatchedFields.nodes
+        .map(f => JSON.parse(f.boundary))
+        .filter(b => b && b.coordinates && b.coordinates.length > 0)
+        .map((f,i) => 
+        <div             data-index={`index-${i}`}
+>
           <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
         </div>);
       
       return (
           <div>
-            <div class="multi-fields-collection" style={multiFieldListStyle}>{multiFieldMaps}</div>
-            <div class="fields-collection" style={fieldListStyle}>{fieldmaps}</div></div>
+            <div className="simplified-fields-collection" style={fieldListStyle}>{multiFieldMaps}</div>
+            <div className="fields-collection" style={fieldListStyle}>{fieldmaps}</div></div>
         )
     }}
   </Query>
