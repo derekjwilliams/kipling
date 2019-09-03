@@ -7,14 +7,14 @@ class MultiFieldBoundary extends Component {
     super(props)
     const topo = topojson.topology({"farmBoundary": props.multiFieldBoundary})
     this.state = {
-    	fieldBoundary: topo,
-    	topofeature: topojson.feature(topo, topo.objects.farmBoundary)
+      fieldBoundary: topo,
+      topofeature: topojson.feature(topo, topo.objects.farmBoundary)
     }
     this.boundaryBoxRef = React.createRef();
   }
 
   componentDidMount() {
-	this.setState({
+  this.setState({
       topofeature: topojson.feature(this.state.fieldBoundary, this.state.fieldBoundary.objects.farmBoundary),
     })
   }
@@ -31,20 +31,20 @@ class MultiFieldBoundary extends Component {
   }
   projection() {
     if (this.boundaryBoxRef.current) {
-    	const width = this.boundaryBoxRef.current.offsetWidth 
-    	const height = this.boundaryBoxRef.current.offsetHeight
-    	const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], this.state.topofeature)
+      const width = this.boundaryBoxRef.current.offsetWidth 
+      const height = this.boundaryBoxRef.current.offsetHeight
+      const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], this.state.topofeature)
       return projection  
     } return null
   }
   
   render() {
-  	if (this.state.topofeature.features == null) {
-  		return (<div></div>)
-  	}
+    if (this.state.topofeature.features == null) {
+      return (<div></div>)
+    }
     
     const pad = 4
-  	const projection = this.projection()
+    const projection = this.projection()
     return (
       <div ref={this.boundaryBoxRef} class="multi-field">
         <svg viewBox={`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}`}>
@@ -55,7 +55,7 @@ class MultiFieldBoundary extends Component {
                   key={ `path-${ i }` }
                   d={ geoPath().projection(projection)(d) }
                   className="multi-field"
-              	  fill={this.randomGreen()}
+                  fill={this.randomGreen()}
                 />
               ))
             }

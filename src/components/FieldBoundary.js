@@ -31,11 +31,22 @@ class FieldBoundary extends Component {
         />})
     }
   }
+  getHeight() {
+    if (this.boundaryBoxRef.current) {
+      return this.boundaryBoxRef.current.offsetHeight ;
+    } return 100
+  }
+  getWidth() {
+    if (this.boundaryBoxRef.current) {
+      return this.boundaryBoxRef.current.offsetWidth ;
+    } return 100
+  }
   render() {
+    const pad = 4
     this.draw();
     return (
       <div ref={this.boundaryBoxRef} className='field-boundary'>
-        <svg viewBox="-4 -4 116 116" ref={(mapSVG) => this.mapSVG = mapSVG}>
+        <svg viewBox=`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}` ref={(mapSVG) => this.mapSVG = mapSVG}>
           <g>{this.fieldPath}</g>
         </svg>
       </div>
