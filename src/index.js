@@ -60,22 +60,31 @@ const FieldBoundaries = () => (
         .filter(b => b)
         .map((f,i) => 
         <div>
-          <MultiFieldBoundary key={i} multiFieldBoundary={f}></MultiFieldBoundary> 
+          <MultiFieldBoundary key={`multi-field-${i}`} multiFieldBoundary={f}></MultiFieldBoundary> 
         </div>);
 
       const fieldmaps = data.allMatchedFields.nodes
         .map(f => JSON.parse(f.boundary))
         .filter(b => b && b.coordinates && b.coordinates.length > 0)
         .map((f,i) => 
-        <div             data-index={`index-${i}`}
->
+        <div key={`field-${i}`} data-index={`index-${i}`}>
           <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
         </div>);
       
+      const simplifiedfieldmaps = data.allMatchedFields.nodes
+        .map(f => JSON.parse(f.boundary))
+        .filter(b => b && b.coordinates && b.coordinates.length > 0)
+        .map((f,i) => 
+        <div key={`field-${i}`} data-index={`index-${i}`}>
+          <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
+        </div>);
+
       return (
           <div>
             <div className="simplified-fields-collection" style={fieldListStyle}>{multiFieldMaps}</div>
-            <div className="fields-collection" style={fieldListStyle}>{fieldmaps}</div></div>
+            <div className="fields-collection" style={fieldListStyle}>{fieldmaps}</div>
+            <div className="fields-collection" style={fieldListStyle}>{simplifiedfieldmaps}</div>
+          </div>
         )
     }}
   </Query>
