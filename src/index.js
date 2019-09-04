@@ -12,17 +12,12 @@ const client = new ApolloClient({
   uri: "http://localhost:5002/graphql"
 });
 
-const multiGeometryListStyle = {
-  display: "grid",
-  gridColumnGap: "15px",
-  backgroundColor: "#eee",
-  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))"
-}
 const geometryListStyle = {
   display: "grid",
   gridColumnGap: "15px",
   backgroundColor: "#eee",
-  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))"
+  gridAutoRows: "1fr",
+  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))"
 }
 
 const Geometries = () => (
@@ -83,7 +78,7 @@ const Geometries = () => (
 
       return (
           <div>
-            <div className="fields-collection" style={geometryListStyle}>{multiFieldMaps}</div>
+            <div className="fields-collection">{multiFieldMaps}</div>
           </div>
         )
     }}
