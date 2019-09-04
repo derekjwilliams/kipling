@@ -21,8 +21,6 @@ code {
   stroke-linejoin: round;
 }
 
-
-
 .multi-geometry-collection, .geometry-collection {
   margin-top: 0;
 }

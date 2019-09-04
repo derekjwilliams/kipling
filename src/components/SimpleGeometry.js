@@ -16,13 +16,8 @@ class SimpleGeometry extends Component {
 
   draw() {
     if (this.boundaryBoxRef.current) {
-  	  const width = this.boundaryBoxRef.current.offsetWidth
-  	  const height = this.boundaryBoxRef.current.offsetHeight
-      const features = [{"type": "Feature", "geometry": this.state.geometry}]
-    	const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], { "type": "FeatureCollection", features })
-      const pathGenerator = geoPath().projection(projection)
-       
-      this.path = features
+      const pathGenerator = geoPath().projection(this.projection())
+      this.path = [{"type": "Feature", "geometry": this.state.geometry}]
         .map((d, i) => {
           return <path
             d={pathGenerator(d)}
@@ -32,10 +27,16 @@ class SimpleGeometry extends Component {
   }
 
   getSize() {
-    if (this.boundaryBoxRef.current) {
-      return Math.min(this.boundaryBoxRef.current.offsetWidth, this.boundaryBoxRef.current.offsetHeight)
-    }
-    return 100 // a non zero default, should never be used in actual rendering
+    return (this.boundaryBoxRef.current) ?
+      Math.min(this.boundaryBoxRef.current.offsetWidth, this.boundaryBoxRef.current.offsetHeight)
+    : 100 // a non zero default, should never be used in actual rendering
+  }
+
+  projection() {
+    const features = [{"type": "Feature", "geometry": this.state.geometry}]
+    return (this.boundaryBoxRef.current) ?
+      geoMercator().fitSize([this.getSize(), this.getSize()], { "type": "FeatureCollection", features })
+    : null // should never be used in actual rendering
   }
 
   render() {
