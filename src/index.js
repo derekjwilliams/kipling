@@ -12,19 +12,11 @@ const client = new ApolloClient({
   uri: "http://localhost:5002/graphql"
 });
 
-const geometryListStyle = {
-  display: "grid",
-  gridColumnGap: "15px",
-  backgroundColor: "#eee",
-  gridAutoRows: "1fr",
-  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))"
-}
-
 const Geometries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 100) {
+      allMatchedFarms(first: 20) {
         totalCount
         nodes {
           id
@@ -33,7 +25,7 @@ const Geometries = () => (
           
         }
       }
-      allMatchedFields(first: 0) {
+      allMatchedFields(first: 10) {
         nodes {
           id 
           boundary
@@ -78,7 +70,8 @@ const Geometries = () => (
 
       return (
           <div>
-            <div className="fields-collection">{multiFieldMaps}</div>
+            <div className="geometry-collection">{multiFieldMaps}</div>
+            <div className="geometry-collection">{simpleGeometries}</div>
           </div>
         )
     }}
@@ -95,3 +88,19 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'));
 
 serviceWorker.unregister();
+
+
+/*  randomGreen() {
+    let result = '#'
+    for (let i = 0; i < 2; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    for (let i = 2; i < 4; i++) {
+      result += '456789ABCDEF'[Math.floor(Math.random() * 10)]
+    }
+    for (let i = 4; i < 6; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    return result
+  }
+*/

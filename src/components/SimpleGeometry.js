@@ -22,48 +22,32 @@ class SimpleGeometry extends Component {
     	const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], { "type": "FeatureCollection", features })
       const pathGenerator = geoPath().projection(projection)
        
-      this.fieldPath = features
+      this.path = features
         .map((d, i) => {
           return <path
             d={pathGenerator(d)}
-            className="field"
-            fill={this.randomGreen()}
+            className="geometry"
         />})
     }
   }
-  getHeight() {
+
+  getSize() {
     if (this.boundaryBoxRef.current) {
-      return this.boundaryBoxRef.current.offsetHeight ;
-    } return 100
+      return Math.min(this.boundaryBoxRef.current.offsetWidth, this.boundaryBoxRef.current.offsetHeight)
+    }
+    return 100 // a non zero default, should never be used in actual rendering
   }
-  getWidth() {
-    if (this.boundaryBoxRef.current) {
-      return this.boundaryBoxRef.current.offsetWidth ;
-    } return 100
-  }
+
   render() {
     const pad = 4
     this.draw();
     return (
       <div ref={this.boundaryBoxRef} className='simple-geometry-boundary'>
-        <svg viewBox={`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}`} ref={(mapSVG) => this.mapSVG = mapSVG}>
-          <g>{this.fieldPath}</g>
+        <svg viewBox={`${-pad} ${-pad} ${this.getSize()+pad*2} ${this.getSize()+pad*2}`} ref={(mapSVG) => this.mapSVG = mapSVG}>
+          <g>{this.path}</g>
         </svg>
       </div>
     )
-  }
-  randomGreen() {
-    let result = '#'
-    for (let i = 0; i < 2; i++) {
-      result += '0123456'[Math.floor(Math.random() * 7)]
-    }
-    for (let i = 2; i < 4; i++) {
-      result += '456789ABCDEF'[Math.floor(Math.random() * 10)]
-    }
-    for (let i = 4; i < 6; i++) {
-      result += '0123456'[Math.floor(Math.random() * 7)]
-    }
-    return result
   }
 }
 
