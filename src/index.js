@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import FieldBoundary from './components/FieldBoundary'
-import MultiFieldBoundary from './components/MultiFieldBoundary'
+import SimpleGeometry from './components/SimpleGeometry'
+import MultiSimpleGeometry from './components/MultiSimpleGeometry'
 import * as serviceWorker from './serviceWorker';
 import ApolloClient from "apollo-boost";
 import { ApolloProvider, Query } from "react-apollo";
@@ -12,18 +12,18 @@ const client = new ApolloClient({
   uri: "http://localhost:5002/graphql"
 });
 
-const multiFieldListStyle = {
+const multiGeometryListStyle = {
   display: "grid",
   backgroundColor: "#333",
   gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
 }
-const fieldListStyle = {
+const geometryListStyle = {
   display: "grid",
   backgroundColor: "#333",
   gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
 }
 
-const FieldBoundaries = () => (
+const Geometries = () => (
   <Query
     query={gql`
     {
@@ -60,28 +60,28 @@ const FieldBoundaries = () => (
         .filter(b => b)
         .map((f,i) => 
         <div>
-          <MultiFieldBoundary key={`multi-field-${i}`} multiFieldBoundary={f}></MultiFieldBoundary> 
+          <MultiSimpleGeometry key={`multi-field-${i}`} multiSimpleGeometry={f}></MultiSimpleGeometry> 
         </div>);
 
-      const fieldmaps = data.allMatchedFields.nodes
+      const simpleGeometries = data.allMatchedFields.nodes
         .map(f => JSON.parse(f.boundary))
         .filter(b => b && b.coordinates && b.coordinates.length > 0)
         .map((f,i) => 
         <div key={`field-${i}`} data-index={`index-${i}`}>
-          <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
+          <SimpleGeometry key={i} fieldBoundary={f}></SimpleGeometry> 
         </div>);
       
-      const simplifiedfieldmaps = data.allMatchedFields.nodes
+      const simplifiedSimpleGeometries = data.allMatchedFields.nodes
         .map(f => JSON.parse(f.simplifiedBoundary))
         .filter(b => b && b.coordinates && b.coordinates.length > 0)
         .map((f,i) => 
         <div key={`field-${i}`} data-index={`index-${i}`}>
-          <FieldBoundary key={i} fieldBoundary={f}></FieldBoundary> 
+          <SimpleGeometry key={i} fieldBoundary={f}></SimpleGeometry> 
         </div>);
 
       return (
           <div>
-            <div className="fields-collection" style={fieldListStyle}>{fieldmaps}</div>
+            <div className="fields-collection" style={geometryListStyle}>{simpleGeometries}</div>
           </div>
         )
     }}
@@ -92,7 +92,7 @@ const FieldBoundaries = () => (
 
 const App = () => (
   <ApolloProvider client={client}>
-    <FieldBoundaries />
+    <Geometries />
   </ApolloProvider>
 );
 ReactDOM.render(<App />, document.getElementById('root'));
