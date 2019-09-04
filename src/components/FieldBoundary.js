@@ -46,13 +46,14 @@ class FieldBoundary extends Component {
     this.draw();
     return (
       <div ref={this.boundaryBoxRef} className='field-boundary'>
-        <svg viewBox=`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}` ref={(mapSVG) => this.mapSVG = mapSVG}>
+        <svg viewBox={`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}`} ref={(mapSVG) => this.mapSVG = mapSVG}>
           <g>{this.fieldPath}</g>
         </svg>
       </div>
     )
   }
   randomGreen() {
+    return '#ffffff'
     let result = '#'
     for (let i = 0; i < 2; i++) {
       result += '0123456'[Math.floor(Math.random() * 7)]

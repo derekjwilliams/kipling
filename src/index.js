@@ -27,7 +27,7 @@ const FieldBoundaries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 40) {
+      allMatchedFarms(first: 0) {
         totalCount
         nodes {
           id
@@ -36,7 +36,7 @@ const FieldBoundaries = () => (
           
         }
       }
-      allMatchedFields(first: 40) {
+      allMatchedFields(first: 400) {
         nodes {
           id 
           boundary
@@ -72,7 +72,7 @@ const FieldBoundaries = () => (
         </div>);
       
       const simplifiedfieldmaps = data.allMatchedFields.nodes
-        .map(f => JSON.parse(f.boundary))
+        .map(f => JSON.parse(f.simplifiedBoundary))
         .filter(b => b && b.coordinates && b.coordinates.length > 0)
         .map((f,i) => 
         <div key={`field-${i}`} data-index={`index-${i}`}>
@@ -81,9 +81,7 @@ const FieldBoundaries = () => (
 
       return (
           <div>
-            <div className="simplified-fields-collection" style={fieldListStyle}>{multiFieldMaps}</div>
             <div className="fields-collection" style={fieldListStyle}>{fieldmaps}</div>
-            <div className="fields-collection" style={fieldListStyle}>{simplifiedfieldmaps}</div>
           </div>
         )
     }}
