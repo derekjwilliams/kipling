@@ -11,18 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-.multi-field {
+.multi-geometry {
 
 }
-.field-boundary {
+.geometry-boundary {
 }
 
-.field {
+.geometry {
   stroke-linejoin: round;
 }
 
 
 
-.multi-fields-collection, .fields-collection {
-  margin-top: 10px;
+.multi-geometry-collection, .geometry-collection {
+  margin-top: 0;
 }

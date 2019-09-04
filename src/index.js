@@ -14,20 +14,22 @@ const client = new ApolloClient({
 
 const multiGeometryListStyle = {
   display: "grid",
-  backgroundColor: "#333",
-  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
+  gridColumnGap: "15px",
+  backgroundColor: "#eee",
+  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))"
 }
 const geometryListStyle = {
   display: "grid",
-  backgroundColor: "#333",
-  gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"
+  gridColumnGap: "15px",
+  backgroundColor: "#eee",
+  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))"
 }
 
 const Geometries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 0) {
+      allMatchedFarms(first: 100) {
         totalCount
         nodes {
           id
@@ -36,7 +38,7 @@ const Geometries = () => (
           
         }
       }
-      allMatchedFields(first: 400) {
+      allMatchedFields(first: 0) {
         nodes {
           id 
           boundary
@@ -60,7 +62,7 @@ const Geometries = () => (
         .filter(b => b)
         .map((f,i) => 
         <div>
-          <MultiSimpleGeometry key={`multi-field-${i}`} multiSimpleGeometry={f}></MultiSimpleGeometry> 
+          <MultiSimpleGeometry key={`multi-field-${i}`} geometries={f}></MultiSimpleGeometry> 
         </div>);
 
       const simpleGeometries = data.allMatchedFields.nodes
@@ -68,7 +70,7 @@ const Geometries = () => (
         .filter(b => b && b.coordinates && b.coordinates.length > 0)
         .map((f,i) => 
         <div key={`field-${i}`} data-index={`index-${i}`}>
-          <SimpleGeometry key={i} fieldBoundary={f}></SimpleGeometry> 
+          <SimpleGeometry key={i} geometry={f}></SimpleGeometry> 
         </div>);
       
       const simplifiedSimpleGeometries = data.allMatchedFields.nodes
@@ -76,12 +78,12 @@ const Geometries = () => (
         .filter(b => b && b.coordinates && b.coordinates.length > 0)
         .map((f,i) => 
         <div key={`field-${i}`} data-index={`index-${i}`}>
-          <SimpleGeometry key={i} fieldBoundary={f}></SimpleGeometry> 
+          <SimpleGeometry key={i} geometry={f}></SimpleGeometry> 
         </div>);
 
       return (
           <div>
-            <div className="fields-collection" style={geometryListStyle}>{simpleGeometries}</div>
+            <div className="fields-collection" style={geometryListStyle}>{multiFieldMaps}</div>
           </div>
         )
     }}

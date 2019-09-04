@@ -1,24 +1,24 @@
 import React, { Component } from "react"
 import { geoMercator, geoPath} from "d3-geo"
 
-class FieldBoundary extends Component {
+class SimpleGeometry extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      fieldBoundary: props.fieldBoundary,
+      geometry: props.geometry,
     }
     this.boundaryBoxRef = React.createRef()
   }
 
   componentDidMount() {
-    this.setState({fieldBoundary: this.state.fieldBoundary})
+    this.setState({geometry: this.state.geometry})
   }
 
   draw() {
     if (this.boundaryBoxRef.current) {
   	  const width = this.boundaryBoxRef.current.offsetWidth
   	  const height = this.boundaryBoxRef.current.offsetHeight
-      const features = [{"type": "Feature", "geometry": this.state.fieldBoundary}]
+      const features = [{"type": "Feature", "geometry": this.state.geometry}]
     	const projection = geoMercator().fitSize([Math.min(width, height), Math.min(width, height)], { "type": "FeatureCollection", features })
       const pathGenerator = geoPath().projection(projection)
        
@@ -45,7 +45,7 @@ class FieldBoundary extends Component {
     const pad = 4
     this.draw();
     return (
-      <div ref={this.boundaryBoxRef} className='field-boundary'>
+      <div ref={this.boundaryBoxRef} className='simple-geometry-boundary'>
         <svg viewBox={`${-pad} ${-pad} ${this.getWidth()+pad*2} ${this.getHeight()+pad*2}`} ref={(mapSVG) => this.mapSVG = mapSVG}>
           <g>{this.fieldPath}</g>
         </svg>
@@ -53,7 +53,6 @@ class FieldBoundary extends Component {
     )
   }
   randomGreen() {
-    return '#ffffff'
     let result = '#'
     for (let i = 0; i < 2; i++) {
       result += '0123456'[Math.floor(Math.random() * 7)]
@@ -68,4 +67,5 @@ class FieldBoundary extends Component {
   }
 }
 
-export default FieldBoundary
+export default SimpleGeometry
+
