@@ -16,7 +16,7 @@ const Geometries = () => (
   <Query
     query={gql`
     {
-      allMatchedFarms(first: 20) {
+      allMatchedFarms(first: 500, after:"WyJwcmltYXJ5X2tleV9hc2MiLFsiMDc1ZjVlN2YtYzkyYS00MTk0LTg2MmQtMTA2M2Q0NjIwYTJmIl1d") {
         totalCount
         nodes {
           id
@@ -25,7 +25,7 @@ const Geometries = () => (
           
         }
       }
-      allMatchedFields(first: 10) {
+      allMatchedFields(first: 200) {
         nodes {
           id 
           boundary

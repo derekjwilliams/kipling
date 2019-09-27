@@ -22,8 +22,22 @@ class SimpleGeometry extends Component {
           return <path
             d={pathGenerator(d)}
             className="geometry"
+            fill={this.randomGreen()}
         />})
     }
+  }
+  randomGreen() {
+    let result = '#'
+    for (let i = 0; i < 2; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    for (let i = 2; i < 4; i++) {
+      result += '456789ABCDEF'[Math.floor(Math.random() * 10)]
+    }
+    for (let i = 4; i < 6; i++) {
+      result += '0123456'[Math.floor(Math.random() * 7)]
+    }
+    return result
   }
 
   getSize() {
